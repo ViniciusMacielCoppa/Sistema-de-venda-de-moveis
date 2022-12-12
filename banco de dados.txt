@@ -1,0 +1,90 @@
+CREATE DATABASE site_mardeira
+
+CREATE TABLE Usuarios(
+user_nome varchar(100),
+user_status varchar(10),
+user_telefone varchar(20),
+user_senha varchar(50) not null,
+user_email varchar(80) not null,
+user_endereco varchar(200),
+user_cpf varchar(14),
+user_foto longblob,
+user_id int auto_increment primary key
+);
+
+CREATE TABLE Avaliacoes(
+avaliacao_descricao varchar(500),
+avaliacao_dia date,
+user_id int,
+avaliacao_id int auto_increment primary key
+);
+
+CREATE TABLE Pedidos(
+pedido_descricao varchar(500),
+user_id int,
+pedido_referencia int,
+pedido_status int(1) not null,
+pedido_resposta_adm varchar(250),
+pedido_resposta_cliente varchar(250),
+pedido_dia date,
+pedido_valor float,
+pedido_id int auto_increment primary key
+);
+
+CREATE TABLE Orcamento(
+data_fim date,
+data_inicio date,
+valor_final float,
+pedido_id int,
+orcamento_id int auto_increment primary key
+);
+
+CREATE TABLE Moveis(
+movel_valor float,
+movel_nome varchar(30),
+movel_tipo varchar(30) not null,
+movel_descricao varchar(500),
+movel_medidas varchar(200),
+movel_imagem longblob,
+movel_id int auto_increment primary key
+);
+
+
+CREATE TABLE moveis_pedido(
+movel_id int not null,
+pedido_id int not null
+);
+
+ALTER TABLE orcamento
+ADD FOREIGN KEY (pedido_id) REFERENCES pedido(pedido_id);
+
+ALTER TABLE pedidos
+ADD FOREIGN KEY (user_id) REFERENCES Usuarios(user_id);
+
+ALTER TABLE pedidos
+ADD FOREIGN KEY (pedido_referencia) REFERENCES Moveis(movel_id);
+
+ALTER TABLE avaliacoes
+ADD FOREIGN KEY (user_id) REFERENCES Usuarios(user_id);
+
+
+
+
+
+
+
+DAR UPDATE EM UM USUARIO PARA ELE GANHAR ADM NO SISTEMA
+
+UPDATE Usuarios SET user_status = 'adm' WHERE user_id = 1
+
+
+
+
+0 -> aberto
+1 -> adm aceitou => 3 ou 4
+2 -> adm recusou
+
+3 -> cliente aceitou => 5 ou 6
+4 -> cliente recusou
+5 -> pedido finalizado - adm
+6 -> pedido cancelado - adm
